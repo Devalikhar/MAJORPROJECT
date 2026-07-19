@@ -44,9 +44,9 @@ router
 
 
          
-         router.get("/signup",(req,res) => {
-            res.render("users/signup");
-         });
+         // router.get("/signup",(req,res) => {
+         //    res.render("users/signup");
+         // });
 
       
          
