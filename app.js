@@ -6,9 +6,10 @@ const express = require("express");
 const app = express();
 
 app.use((req, res, next) => {
-   console.log("FIRST MIDDLEWARE:", req.method, req.url);
+   res.locals.currUser = null;
    next();
 });
+
 const mongoose = require("mongoose");
 const path = require("path");
 const methodOverride = require("method-override");
@@ -75,7 +76,15 @@ const sessionOptions = {
    },
 };
 
+app.use((req, res, next) => {
+   console.log("TEST MIDDLEWARE");
 
+   res.locals.success = [];
+   res.locals.error = [];
+   res.locals.currUser = null;
+
+   next();
+});
 app.use(session(sessionOptions));
 app.use(flash());
 
