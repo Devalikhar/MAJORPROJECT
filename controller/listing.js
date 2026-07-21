@@ -1,9 +1,12 @@
 const Listing = require("../models/listing.js");
 const axios = require("axios");
 
-module.exports.index = async(req,res) => {
-            const allListings = await Listing.find({}).populate("owner");
-            res.render("listings/index.ejs",{allListings});
+
+module.exports.index = async (req, res) => {
+  const allListings = await Listing.find({});
+  console.log(allListings);
+  res.render("listings/index.ejs", { allListings });
+
 };
 
 module.exports.renderNewForm = (req,res) => {
@@ -62,7 +65,7 @@ module.exports.createListing = async(req,res,next) => {
  };
            
                
-            // Fix image
+     // Fix image
            if (
             !req.body.listing.image ||
             !req.body.listing.image.url ||

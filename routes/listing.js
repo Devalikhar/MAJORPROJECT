@@ -43,22 +43,16 @@ router
                 
 
 
-         
-         // router.get("/signup",(req,res) => {
-         //    res.render("users/signup");
-         // });
-
       
-         
-         
-         
-         //Edit Route
-         router.get("/:id/edit",
-         isLoggedIn,
-         isOwner,
-         wrapAsync(listingController.renderEditForm)
-         );
+//Edit Route
+router.get("/:id/edit",
+isLoggedIn,
+isOwner,
+wrapAsync(listingController.renderEditForm)
+);
          
          
 
 module.exports = router;
+
+

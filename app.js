@@ -51,21 +51,10 @@ app.use(express.static(path.join(__dirname,"public")));
 
 console.log("SECRET:", process.env.SECRET);
 console.log("Length:", process.env.SECRET?.length);
-const store = MongoStore.create({
-   mongoUrl: dbUrl,
-   crypto:{
-      secret: process.env.SECRET,
-   },
-   touchAfter: 24 * 3600,
-   
-}); 
 
-store.on("error", (err) => {
-   console.log("ERROR in MONGO SESSION STORE",err);
-}); 
+
 
 const sessionOptions = {
-   store,
    secret: process.env.SECRET,
    resave: false,
    saveUninitialized: true,
@@ -76,15 +65,9 @@ const sessionOptions = {
    },
 };
 
-app.use((req, res, next) => {
-   console.log("TEST MIDDLEWARE");
 
-   res.locals.success = [];
-   res.locals.error = [];
-   res.locals.currUser = null;
 
-   next();
-});
+
 app.use(session(sessionOptions));
 app.use(flash());
 
@@ -100,18 +83,9 @@ passport.deserializeUser(User.deserializeUser());
 console.log("Before Locals Middleware"); 
 
 app.use((req,res,next) => {  
-   // console.log("URL:", req.originalUrl);
-   // console.log("Authenticated:", req.isAuthenticated());
-   // console.log("User:", req.user);
-
-
-   // res.locals.success = req.flash("success");
-   // res.locals.error = req.flash("error");
-   // res.locals.currUser = req.user;
-
    res.locals.currUser = req.user || null;
-    res.locals.success = req.flash("success");
-    res.locals.error = req.flash("error");
+   res.locals.success = req.flash("success");
+   res.locals.error = req.flash("error");
 
     console.log("res.locals =", res.locals);
    next();
@@ -123,9 +97,14 @@ app.use("/listings",listingRouter);
 app.use("/listings/:id/reviews",reviewRouter);
 app.use("/",userRouter);
 
-app.use((req,res,next) => {
-   next(new ExpressError(404,"Page not found"));
+app.use((req, res, next) => {
+   console.log("404 URL =>", req.originalUrl);
+   next(new ExpressError(404, "Page not found"));
 });
+
+
+
+
 
 app.use((err,req,res,next)=>{
    let {statusCode=500, message="Something went wrong!"}= err;
@@ -134,3 +113,6 @@ app.use((err,req,res,next)=>{
 app.listen(8080,() => {
             console.log("server is listening to port 8080");
 });
+
+
+console.log(process.env.ATLASDB_URL);
