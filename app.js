@@ -49,8 +49,6 @@ app.use(methodOverride("_method"));
 app.engine("ejs",ejsMate);
 app.use(express.static(path.join(__dirname,"public")));
 
-console.log("SECRET:", process.env.SECRET);
-console.log("Length:", process.env.SECRET?.length);
 
 
 
@@ -71,7 +69,6 @@ const sessionOptions = {
 app.use(session(sessionOptions));
 app.use(flash());
 
-console.log("Before Passport");
 
 app.use(passport.initialize());
 app.use(passport.session());
@@ -80,7 +77,6 @@ passport.use(new LocalStrategy(User.authenticate()));
 passport.serializeUser(User.serializeUser());
 passport.deserializeUser(User.deserializeUser());
 
-console.log("Before Locals Middleware"); 
 
 app.use((req,res,next) => {  
    res.locals.currUser = req.user || null;
@@ -115,4 +111,3 @@ app.listen(8080,() => {
 });
 
 
-console.log(process.env.ATLASDB_URL);
